@@ -49,9 +49,8 @@ module.exports.createUser = async function (req, res) {
         res.status(500).send("Internal Server Error Occured");
     }
 }
-
+//2. Controller to Login an existing User
 //Login a user using: POST '/api/auth/login'. Doesn't require auth, no login required
-//1. Controller to Login an existing User
 module.exports.loginUser = async function (req, res) {
     try {
         //check whether the user already exists for a given email
@@ -87,6 +86,24 @@ module.exports.loginUser = async function (req, res) {
         res.json({
             authToken
         })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error Occured");
+    }
+}
+//3. Controller to get Details of an existing User.
+//Get details of  a user using: POST '/api/auth/getuser'.
+//requires auth, login required
+
+module.exports.getUserDetails = async function (req, res) {
+    try {
+        const userId = req.user.id;
+        //we find the ser in the database by the id and get the details of user in the user variable except the password
+        let user = await User.findById(userId).select("-password");
+        // here we get all the details of the user except password
+        //  console.log(user);
+        res.send(user);
+        //send the user details except password as a response
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error Occured");
