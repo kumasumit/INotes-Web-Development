@@ -16,7 +16,13 @@ router.get('/fetchallnotes', fetchUser,notesController.fetchAllNotes);
 //Route 2: Route to add a new note
 //Create a a note using: POST '/api/notes/addnote'.
 // requires auth, login required
-router.get('/addnote', fetchUser,notesValidatorMiddleware.createNoteValidator, notesController.createNote);
+router.post('/addnote', fetchUser,notesValidatorMiddleware.createNoteValidator, notesController.createNote);
+//here fetchUser is the middleware
+
+//Route 3: Route to update an existing note
+//Update an existing note using: PUT '/api/notes/updatenote'.
+// requires auth, login required
+router.put('/updatenote/:id', fetchUser, notesController.updateNote);
 //here fetchUser is the middleware
 
 module.exports = router
