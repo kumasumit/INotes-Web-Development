@@ -20,9 +20,14 @@ router.post('/addnote', fetchUser,notesValidatorMiddleware.createNoteValidator, 
 //here fetchUser is the middleware
 
 //Route 3: Route to update an existing note
-//Update an existing note using: PUT '/api/notes/updatenote'.
+//Update an existing note using: PUT '/api/notes/updatenote/:id'.
 // requires auth, login required
 router.put('/updatenote/:id', fetchUser, notesController.updateNote);
 //here fetchUser is the middleware
 
+//Route 4: Route to delete an existing note
+//Delete an existing note using: DELETE '/api/notes/deletenote/:id'.
+// requires auth, login required
+router.delete('/deletenote/:id', fetchUser, notesController.deleteNote);
+//here fetchUser is the middleware
 module.exports = router

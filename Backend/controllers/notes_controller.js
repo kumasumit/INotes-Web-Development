@@ -69,3 +69,34 @@ module.exports.updateNote = async function (req, res) {
         res.status(500).send("Internal Server Error Occured");
     }
 }
+
+
+//Action 4: to delete a note by a logged-in user
+module.exports.deleteNote = async function (req, res) {
+    try {
+               //find the note to be deleted and delete it
+        let note = await Note.findById(req.params.id);
+        if(!note){
+            //if no note exists for the req.params id, then
+            //just return the error
+            return res.status(404).send("Note not found");
+        }
+        //if the note exists
+        if(note.user.toString() !== req.user.id){
+            //if the userId stored in noted schema is different from the req.user id,
+            //means person trying to update the note is not the same person trying to update the note
+            //we return 401, request forbidden
+            return res.status(401).send("Not Allowed");
+        }
+        //if the note exists and the logged-in user is the same user trying to update the note, then
+        //Allow deletion only if logged-in user or req.user owns the note
+        note = await Note.findByIdAndDelete(req.params.id);
+        // console.log(note);
+        //this logged the deleted note object
+        res.json({"Success": "Note has been deleted"});
+        //at last we send the updated note
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error Occured");
+    }
+}
