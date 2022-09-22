@@ -2,6 +2,11 @@
 const mongoose= require('mongoose');
 //Design a Note Schema
 const notesSchema = new mongoose.Schema({
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        //here for every note created we are linking it with the user who created that note
+    },
     title: {
         type: String,
         required: true,
