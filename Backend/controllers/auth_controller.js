@@ -1,13 +1,14 @@
+//here we handle all the imports/requires
+const User = require('../models/users');
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+//here all the imports/requires end
+
+
+const JWT_TOKEN = "sumitisagoo$dby";
 //Create a user using: POST '/api/auth'. Doesn't require auth, no login required
 //1. Controller to Create a new User
-module.exports.creatUser = async function (req, res) {
-
-    // Finds the validation errors in this request and wraps them in an object with handy functions
-    const errors = validationResult(req);
-    //if the errors is not empty, it means we need to send those errors
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+module.exports.createUser = async function (req, res) {
     try {
         //check whether the user already exists for a given email
         //we search the user collection by email and check if already user is defined for req.body.email
@@ -16,7 +17,8 @@ module.exports.creatUser = async function (req, res) {
 
         if (user) {
             //if user with given email already exists
-            res.status(400).json({ error: "Sorry a user with this email already exists" });
+            //then throw error and return
+           return res.status(400).json({ error: "Sorry a user with this email already exists" });
         }
 
         //if user with the email address does not already exist,
@@ -29,8 +31,19 @@ module.exports.creatUser = async function (req, res) {
             name: req.body.name,
             email: req.body.email,
             password: securePassword,
+            //here we store the hashed password not the plain text password
         })
-        res.json(user);
+        const data = {
+            user: {
+                id: user.id
+            }
+        }
+        const authToken = jwt.sign(data, JWT_TOKEN);
+        // console.log(authToken);
+        // res.json(user);
+        res.json({
+            authToken
+        })
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Some Error Occured");

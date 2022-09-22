@@ -1,5 +1,8 @@
+//here we handle all the imports/requires
 const express = require('express')
 const connectToMongo = require('./config/db');
+//here all the imports/requires end
+
 const app = express()
 const port = 8080
 

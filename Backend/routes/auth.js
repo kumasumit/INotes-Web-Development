@@ -1,25 +1,24 @@
+//here we handle all the imports/requires
 const express = require('express')
-const User = require('../models/users');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
-const { check } = require('express-validator');
-var bcrypt = require('bcryptjs');
+//here all the imports/requires end
 
-//Create a user using: POST '/api/auth'. Doesn't require auth, no login required
+//include the auth_controller
+const authController = require('../controllers/auth_controller');
+//include the auth_validator_middleware
+const authValidatorMiddleware = require('../config/auth_validator_middleware');
+
 //Route 1: Route to create a new user
-router.post('/createuser',[
-    //all the checks and validation will be here
-    //the name of the user must be at least 3 characters long
- body('name',"Enter a valid name").isLength({min: 3}),
- // email must be an email
- body('email', "Enter a valid email").isEmail(),
- check('password')
-    .isLength({ min: 5 })
-    .withMessage('must be at least 5 chars long')
-    .matches(/\d/)
-    .withMessage('must contain a number'),
-], async(req, res)=>{
+//Create a user using: POST '/api/auth/createuser'.
+//Doesn't require auth, no login required
+router.post('/createuser',authValidatorMiddleware.createUserValidator, authController.createUser);
+//createUser is an action in auth_controller.js inside controllers folder
 
-})
+
+//Route 2: Login a User
+//Login/Authenticate a user using: POST '/api/auth/login'.
+//Doesn't require auth, no login required
+router.post('/login',)
 
 module.exports = router;
+//at last we expport the router
