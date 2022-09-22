@@ -46,6 +46,49 @@ module.exports.createUser = async function (req, res) {
         })
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Some Error Occured");
+        res.status(500).send("Internal Server Error Occured");
+    }
+}
+
+//Login a user using: POST '/api/auth/login'. Doesn't require auth, no login required
+//1. Controller to Login an existing User
+module.exports.loginUser = async function (req, res) {
+    try {
+        //check whether the user already exists for a given email
+        //we search the user collection by email and check if a user is defined for req.body.email
+        let user = await User.findOne({ email: req.body.email })
+        //  console.log(user);
+
+        if (!user) {
+            //if user with given email does not exist
+            //then throw error and return
+           return res.status(400).json({ error:"Please try to login with correct credentials" });
+        }
+
+        //if user with the email address exists,
+        //we compare the stored password and the user entered password
+        const passwordCompare = await bcrypt.compare(req.body.password, user.password);
+
+        if(!passwordCompare){
+            //if the passwords dont match
+            return res.status(400).json({ error:"Please try to login with correct credentials" });
+        }
+
+        //if passwords match
+        const payload =
+        {
+         user:{
+            id: user.id
+         }
+        }
+        const authToken = jwt.sign(payload, JWT_TOKEN);
+        // console.log(authToken);
+        // res.json(user);
+        res.json({
+            authToken
+        })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error Occured");
     }
 }

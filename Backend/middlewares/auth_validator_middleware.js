@@ -1,5 +1,7 @@
 const { check } = require('express-validator');
 const { validationResult } = require('express-validator');
+
+
 //Validator 1 :: /createuser, validate creating a user
 //a validator to validate create User/ inputs while creating a user
 module.exports.createUserValidator = async function(req, res, next) {
@@ -30,7 +32,8 @@ module.exports.loginUserValidator = async function(req, res, next) {
 
     await check('email').isEmail().
     withMessage('Please enter a valid email').run(req);
-    await check('password').exists().
+    await check('password').notEmpty().
+    //notempty checks that the password field is not empty
     withMessage('Password cannot be blank').run(req);
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const result = validationResult(req);
