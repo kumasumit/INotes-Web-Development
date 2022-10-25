@@ -1,4 +1,6 @@
 //here we handle all the imports/requires
+require("dotenv").config();
+
 const express = require('express')
 const connectToMongo = require('./config/db');
 //here all the imports/requires end

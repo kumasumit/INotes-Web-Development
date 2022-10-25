@@ -2,10 +2,10 @@
 const User = require('../models/users');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+const {JWT_TOKEN} = require("./../constants");
+
 //here all the imports/requires end
 
-
-const JWT_TOKEN = "sumitisagoo$dby";
 //Create a user using: POST '/api/auth'. Doesn't require auth, no login required
 //1. Controller to Create a new User
 module.exports.createUser = async function (req, res) {
