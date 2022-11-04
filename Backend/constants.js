@@ -1,5 +1,5 @@
 require("dotenv").config();
 
-const {JWT_TOKEN} = procss.env;
+const { JWT_TOKEN } = process.env;
 
-module.exports = {JWT_TOKEN}
+module.exports = { JWT_TOKEN };
