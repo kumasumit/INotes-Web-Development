@@ -9,7 +9,6 @@ const NoteState = (props) => {
   };
   const [state, setstate] = useState(s1);
   const update = () => {
-    console.log("inside the updte function");
     setTimeout(() => {
       setstate({
         name: "Sumit",
@@ -22,8 +21,6 @@ const NoteState = (props) => {
   return (
     <noteContext.Provider value={{ state, update }}>
       {/* here we are passing two things state and update function */}
-      {/* ask rahul >> ????
-        what is the flow and use of this code     */}
       {props.children}
     </noteContext.Provider>
   );

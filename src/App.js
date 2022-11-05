@@ -11,13 +11,13 @@ function App() {
       {/* here we are giving access to our App to our entire Notestate. */}
       <NoteState>
         <BrowserRouter>
-          {/* Ask rahul >>> ???
-      to explain this flow */}
           <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </div>
         </BrowserRouter>
       </NoteState>
     </div>
