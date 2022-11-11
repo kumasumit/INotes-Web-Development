@@ -2,20 +2,21 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = () => {
+const Login = (props) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const handleSubmit = (e) => {
+    // Ask rahul >>> to do form validation here
     e.preventDefault();
     const { email, password } = credentials;
-    console.log(email + " " + password);
+    // console.log(email + " " + password);
     const values = {
       email,
       password,
     };
     //here we create an async function to send axios post request to login a user
     async function loginUser(values) {
-      console.log("hi from Login function");
+      // console.log("hi from Login function");
       try {
         //this is the fetch api call for same endpoint
         // const response = await fetch("http://localhost:8080/api/auth/login", {
@@ -36,18 +37,24 @@ const Login = () => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        console.log(data);
+        // console.log(data);
         if (data.success) {
           //if we get success response then we save the authToken and redirect
           //save the authToken
           localStorage.setItem("token", data.authToken);
           // window.location.href = "/"; ask rahul >> to explain this code
+          //before redirecting show the alert or toast can also be used here
+          props.showAlert("Logged in successfully", "success");
+          //here showAlert takes message and tye
           navigate("/");
         } else {
           alert("Invalid Credentials");
         }
       } catch (error) {
-        console.log("error: ", error);
+        console.log("error: ", error.response.data.error);
+        //before redirecting show the alert or toast can also be used here
+        props.showAlert("Invalid credentials", "danger");
+        //here showAlert takes message and tye
       }
     }
     //here we call the loginUser function
@@ -74,6 +81,8 @@ const Login = () => {
             value={credentials.email}
             onChange={onChange}
             aria-describedby="emailHelp"
+            minLength={1}
+            required
           />
           <div id="emailHelp" className="form-text">
             We'll never share your email with anyone else.
@@ -90,9 +99,10 @@ const Login = () => {
             name="password"
             onChange={onChange}
             value={credentials.password}
+            minLength={5}
+            required
           />
         </div>
-
         <button type="submit" className="btn btn-primary">
           Submit
         </button>

@@ -10,6 +10,7 @@ const { JWT_TOKEN } = require("./../constants");
 //1. Controller to Create a new User
 module.exports.createUser = async function (req, res) {
   try {
+    console.log("hi from sign up api");
     console.log(req.body);
     console.log(
       ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Body ends config starts"
@@ -38,9 +39,7 @@ module.exports.createUser = async function (req, res) {
     //if user with the email address does not already exist,
     //we hash the password with bcrypt.js by adding salt
     const salt = bcrypt.genSaltSync(5);
-
     const securePassword = await bcrypt.hash(password, salt);
-
     //Create a new user
     user = await User.create({
       name: req.body.name,
@@ -71,6 +70,12 @@ module.exports.createUser = async function (req, res) {
 //Login a user using: POST '/api/auth/login'. Doesn't require auth, no login required
 module.exports.loginUser = async function (req, res) {
   try {
+    console.log("+++++++++++++++++++++Login Api starts here");
+    console.log(req.body);
+    console.log(
+      ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Body ends config starts"
+    );
+    console.log(req.headers);
     let success = false;
     //we assign a success variabe false by default.
     //check whether the user already exists for a given email
@@ -83,7 +88,8 @@ module.exports.loginUser = async function (req, res) {
       //then throw error and return
       return res.status(400).json({
         success,
-        error: "Please try to login with correct credentials",
+        error: "User with email '" + req.body.email + "' does not exist'",
+        // error: "Please try to login with correct credentials",
       });
     }
 
@@ -98,7 +104,8 @@ module.exports.loginUser = async function (req, res) {
       //if the passwords dont match
       return res.status(400).json({
         success,
-        error: "Please try to login with correct credentials",
+        error: "Passwords don't match",
+        // error: "Please try to login with correct credentials",
       });
     }
 

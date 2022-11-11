@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 
-const AddNote = () => {
+const AddNote = (props) => {
+  const { showAlert } = props;
   const context = useContext(noteContext);
   const { addNote } = context;
   const initialNoteState = {
@@ -11,9 +12,13 @@ const AddNote = () => {
   };
   const [note, setNote] = useState(initialNoteState);
   const handleSubmit = (e) => {
+    //here we technically dont need e.preventDefault
+    //because we are putting handleSubmit on button onclick and not on form submit
+    //Ask rahul >> which is the better way to handle submit
     e.preventDefault();
-    //this will prevent the reload of the form o submission
+    //this will prevent the reload of the form on submission
     addNote(note.title, note.description, note.tag);
+    showAlert("Note added successfully", "success");
     //here we are doing setNote to clear the fields once the function is called.
     setNote(initialNoteState);
   };
@@ -78,6 +83,7 @@ const AddNote = () => {
         <button
           type="submit"
           className="btn btn-primary"
+          // here we disable the Add Note if the title and description is <5
           disabled={note.title.length < 5 || note.description.length < 5}
           onClick={handleSubmit}
         >

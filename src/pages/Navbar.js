@@ -1,10 +1,17 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const Navbar = () => {
   let location = useLocation();
   // useEffect(() => {
   //   console.log(location.pathname);
   // }, [location]);
+  const navigate = useNavigate();
+  //A handler to handle onclick event on logout button
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    //after logout when you remove the token from localStorage, redirect to the login page
+    navigate("/login");
+  };
 
   return (
     <>
@@ -48,24 +55,34 @@ const Navbar = () => {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex">
-              <div>
-                <Link
-                  className="btn btn-primary mx-1"
-                  to="/login"
-                  role="button"
-                >
-                  LogIn
-                </Link>
-                <Link
-                  className="btn btn-primary mx-1"
-                  to="/signup"
-                  role="button"
-                >
-                  SignUp
-                </Link>
-              </div>
-            </form>
+            {
+              // if there is no token in the localStorage, token item means no user is logged in , then show Login and SignUp buttons
+              !localStorage.getItem("token") ? (
+                <form className="d-flex">
+                  <div>
+                    <Link
+                      className="btn btn-primary mx-1"
+                      to="/login"
+                      role="button"
+                    >
+                      LogIn
+                    </Link>
+                    <Link
+                      className="btn btn-primary mx-1"
+                      to="/signup"
+                      role="button"
+                    >
+                      SignUp
+                    </Link>
+                  </div>
+                </form>
+              ) : (
+                // if there is token in the localStorage, token item means user is logged in , then show Logged in User name and Logout button
+                <button className="btn btn-primary mx-1" onClick={handleLogout}>
+                  Logout
+                </button>
+              )
+            }
           </div>
         </div>
       </nav>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Signup = () => {
+const Signup = (props) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     name: "",
@@ -13,9 +13,12 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, password, confirmPassword } = credentials;
-    console.log(name + " " + email + " " + password + " " + confirmPassword);
+    // console.log(name + " " + email + " " + password + " " + confirmPassword);
     //write the logic to check password and confirmPassword here
-
+    if (password !== confirmPassword) {
+      props.showAlert("Password and confirm password dont match", "danger");
+      return;
+    }
     const values = {
       name,
       email,
@@ -23,7 +26,7 @@ const Signup = () => {
     };
     //here we create an async function to signup the user
     async function signUpUser(values) {
-      console.log("hi from Signup function");
+      // console.log("hi from Signup function");
       try {
         //this is the axios api call to create-signUp a user
         const { data } = await axios.post(
@@ -47,18 +50,25 @@ const Signup = () => {
         // );
         // const data = await response.json();
 
-        console.log(data);
+        // console.log(data);
         if (data.success) {
           //if we get success response then we save the authToken and redirect to login screen
           //save the authToken
-          localStorage.setItem("token", data.authToken);
+          // here we are not setting the token in localStorage on signup we set the token in localStorage on login of the component
+          // localStorage.setItem("token", data.authToken);
           // window.location.href = "/";
+          //before redirecting show the alert or toast can also be used here
+          props.showAlert("Signed - up successfully", "success");
+          //here showAlert takes message and tye
           navigate("/login");
         } else {
           alert("Invalid credentials");
         }
       } catch (error) {
         console.log("error: ", error);
+        //before redirecting show the alert or toast can also be used here
+        props.showAlert("Invalid credentials", "danger");
+        //here showAlert takes message and tye
       }
     }
     //here we call the signUpUser function
@@ -89,6 +99,7 @@ const Signup = () => {
             // minLength={5}
             required
           />
+          {/* here we are using this div to describe email address input */}
           <div id="emailHelp" className="form-text">
             We'll never share your email with anyone else.
           </div>
